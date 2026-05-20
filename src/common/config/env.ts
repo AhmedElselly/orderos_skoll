@@ -12,8 +12,6 @@ const schema = z.object({
 
 const parsed = schema.parse(process.env);
 
-console.log({ parsed });
-
 export const env = {
 	port: Number(parsed.PORT),
 	db: {
