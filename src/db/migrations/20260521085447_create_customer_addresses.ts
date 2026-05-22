@@ -7,6 +7,12 @@ export async function up(knex: Knex): Promise<void> {
             id serial primary key,
             user_id bigint not null,
             label text not null,
+            city text not null,
+            country text not null,
+            street text not null,
+            building text not null,
+            apartment_number text not null,
+            type text not null,
             lng decimal(10, 6) not null,
             lat decimal(10, 6) not null
             is_default boolean default false,
