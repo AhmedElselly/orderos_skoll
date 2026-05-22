@@ -1,4 +1,10 @@
+import { config } from 'dotenv';
+import path from 'path';
 import z from 'zod';
+
+config({
+	path: path.resolve(import.meta.dirname, '../../../.env'),
+});
 
 const schema = z.object({
 	PORT: z.string().default('3000'),
@@ -8,6 +14,8 @@ const schema = z.object({
 	DB_PASSWORD: z.string(),
 	DB_NAME: z.string().default('order_os_db'),
 	DB_POOL_MAX: z.string().default('10'),
+	DB_MIGRATIONS_DIRECTORY: z.string(),
+	DB_MIGRATIONS_EXTENSION: z.string(),
 });
 
 const parsed = schema.parse(process.env);
@@ -21,5 +29,7 @@ export const env = {
 		password: parsed.DB_PASSWORD,
 		name: parsed.DB_NAME,
 		poolMax: Number(parsed.DB_POOL_MAX),
+		migrationsDir: path.resolve(import.meta.dirname, "../../../", parsed.DB_MIGRATIONS_DIRECTORY),
+		migrationsExt: parsed.DB_MIGRATIONS_EXTENSION,
 	}
 };

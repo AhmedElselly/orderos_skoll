@@ -1,8 +1,7 @@
-import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import routes from './routes';
-import { env } from './common/config/env';
+import routes from './routes.ts';
+import { env } from './common/config/env.ts';
 
 export const startServer = () => {
 	const app = express();

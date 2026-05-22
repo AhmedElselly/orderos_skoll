@@ -1,6 +1,6 @@
 import http from "http";
-import { startServer } from "./app";
-import { env } from "./common/config/env";
+import { startServer } from "./app.ts";
+import { env } from "./common/config/env.ts";
 
 const app = startServer();
 
