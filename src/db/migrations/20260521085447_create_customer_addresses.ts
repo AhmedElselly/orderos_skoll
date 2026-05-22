@@ -10,11 +10,11 @@ export async function up(knex: Knex): Promise<void> {
             city text not null,
             country text not null,
             street text not null,
-            building text not null,
+            building text nullable,
             apartment_number text not null,
-            type text not null,
-            lng decimal(10, 6) not null,
-            lat decimal(10, 6) not null
+            type text not null check (type in ('office', 'home', 'public_place)),
+            lng decimal(10, 7) not null,
+            lat decimal(10, 7) not null
             is_default boolean default false,
             created_at timestamp default now(),
             updated_at timestamp default now(),
