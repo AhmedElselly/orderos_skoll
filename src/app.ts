@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import routes from './routes.ts';
-import { env } from './common/config/env.ts';
+import routes from './routes';
 
 export const startServer = () => {
 	const app = express();

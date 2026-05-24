@@ -3,7 +3,7 @@ import path from 'path';
 import z from 'zod';
 
 config({
-	path: path.resolve(import.meta.dirname, '../../../.env'),
+	path: path.resolve(__dirname, '../../../.env'),
 });
 
 const schema = z.object({
@@ -16,6 +16,10 @@ const schema = z.object({
 	DB_POOL_MAX: z.string().default('10'),
 	DB_MIGRATIONS_DIRECTORY: z.string(),
 	DB_MIGRATIONS_EXTENSION: z.string(),
+	ACCESS_SECRET_KEY: z.string(),
+	REFRESH_SECRET_KEY: z.string(),
+	ACCESS_TOKEN_EXPIRATION: z.string(),
+	REFRESH_TOKEN_EXPIRATION: z.string(),
 });
 
 const parsed = schema.parse(process.env);
@@ -29,7 +33,13 @@ export const env = {
 		password: parsed.DB_PASSWORD,
 		name: parsed.DB_NAME,
 		poolMax: Number(parsed.DB_POOL_MAX),
-		migrationsDir: path.resolve(import.meta.dirname, "../../../", parsed.DB_MIGRATIONS_DIRECTORY),
+		migrationsDir: path.resolve(__dirname, "../../../", parsed.DB_MIGRATIONS_DIRECTORY),
 		migrationsExt: parsed.DB_MIGRATIONS_EXTENSION,
+	},
+	jwt: {
+		refreshSecretKey: parsed.REFRESH_SECRET_KEY,
+		accessSecretKey: parsed.ACCESS_SECRET_KEY,
+		refreshTokenExpiration: parsed.REFRESH_TOKEN_EXPIRATION,
+		accessTokenExpiration: parsed.ACCESS_TOKEN_EXPIRATION,
 	}
 };

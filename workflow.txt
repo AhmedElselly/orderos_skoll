@@ -1,0 +1,10 @@
+Database migration
+
+- Implement bottom up approach
+Create entity classes that represent Database
+Create repository queries
+Create service functions
+Create controllers
+Create routes
+
+Test & Repeat

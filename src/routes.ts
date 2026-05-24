@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { healthRouter } from "./app/health/health.routes.ts";
+import { healthRouter } from "./app/health/health.routes";
 
 const routes = Router();
 

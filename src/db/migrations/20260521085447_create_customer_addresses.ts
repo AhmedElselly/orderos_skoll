@@ -10,16 +10,16 @@ export async function up(knex: Knex): Promise<void> {
             city text not null,
             country text not null,
             street text not null,
-            building text nullable,
+            building text,
             apartment_number text not null,
-            type text not null check (type in ('office', 'home', 'public_place)),
+            type text not null check (type in ('office', 'home', 'public_place')),
             lng decimal(10, 7) not null,
-            lat decimal(10, 7) not null
+            lat decimal(10, 7) not null,
             is_default boolean default false,
             created_at timestamp default now(),
             updated_at timestamp default now(),
 
-            constraints fk_customer_addresses_user_id foreign key (user_id) references users(id) on delete cascade
+            constraint fk_customer_addresses_user_id foreign key (user_id) references users(id) on delete cascade
         );
         create index idx_customer_addresses_user_id on customer_addresses(user_id);`)
 }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ping } from "../../common/knex/knex.ts";
+import { ping } from "../../common/knex/knex";
 
 export const healthRouter = Router();
 
