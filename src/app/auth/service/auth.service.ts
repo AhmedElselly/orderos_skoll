@@ -1,7 +1,8 @@
+import id from "zod/v4/locales/id.js";
 import { SystemRole } from "../../user/enums";
 import { createUser, findUserExistsByEmailOrPhone } from "../../user/repository/users.repo";
 import { AuthDto } from "../dto/auth.dto";
-import { hashPassword } from "../utils";
+import { createAccessToken, createRefreshToken, hashPassword } from "../utils";
 
 export class AuthService {
 	async register(data: AuthDto): Promise<any> {
@@ -28,6 +29,28 @@ export class AuthService {
 			updatedAt: now,
 		});
 
+		const payload = {
+			userId: user.id,
+			email: user.email,
+			role: data.systemRole,
+		}
 
+		const accessToken = await createAccessToken(payload);
+		const refreshToken = await createRefreshToken(payload);
+
+		return {
+			accessToken,
+			refreshToken,
+			user: {
+				id: user.id,
+				email: user.email,
+				phone: user.phone,
+				systemRole: user.systemRole,
+			}
+		}
 	}
 }
+
+const authService = new AuthService();
+
+export default authService;

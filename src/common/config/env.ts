@@ -1,4 +1,5 @@
 import { config } from 'dotenv';
+import { SignOptions } from 'jsonwebtoken';
 import path from 'path';
 import z from 'zod';
 
@@ -24,6 +25,20 @@ const schema = z.object({
 
 const parsed = schema.parse(process.env);
 
+type JwtExpiresIn = NonNullable<SignOptions["expiresIn"]>;
+
+const jwtExpiresInSchema = z.custom<JwtExpiresIn>(
+	(value) => {
+		return (
+			typeof value === "string" &&
+			/^\d+(ms|s|m|h|d|w|y)$/.test(value)
+		);
+	},
+	{
+		message: "Must be a valid JWT expiration like 15m, 1h, 7d",
+	}
+);
+
 export const env = {
 	port: Number(parsed.PORT),
 	db: {
@@ -39,7 +54,7 @@ export const env = {
 	jwt: {
 		refreshSecretKey: parsed.REFRESH_SECRET_KEY,
 		accessSecretKey: parsed.ACCESS_SECRET_KEY,
-		refreshTokenExpiration: parsed.REFRESH_TOKEN_EXPIRATION,
-		accessTokenExpiration: parsed.ACCESS_TOKEN_EXPIRATION,
+		refreshTokenExpiration: jwtExpiresInSchema.parse(parsed.REFRESH_TOKEN_EXPIRATION),
+		accessTokenExpiration: jwtExpiresInSchema.parse(parsed.ACCESS_TOKEN_EXPIRATION),
 	}
 };

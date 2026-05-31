@@ -1,6 +1,6 @@
 export enum SystemRole {
-    ADMIN = "ADMIN",
-    CUSTOMER = "CUSTOMER",
-    DELIVERY_AGENT = "DELIVERY_AGENT",
-    RESTAURANT_USER = "RESTAURANT_USER"
+    ADMIN = "system_admin",
+    CUSTOMER = "customer",
+    DELIVERY_AGENT = "delivery_agent",
+    RESTAURANT_USER = "restaurant_user"
 }
