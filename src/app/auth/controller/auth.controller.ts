@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import authService, { AuthService } from "../service/auth.service";
 import { validateBody } from "../../../common/validation/validate";
-import { AuthDto } from "../dto/auth.dto";
+import { AuthDto, LoginDto } from "../dto/auth.dto";
 
 export class AuthController {
 	constructor(private readonly authService: AuthService) { }
@@ -15,8 +15,18 @@ export class AuthController {
 			next(error)
 		}
 	}
-}
 
+	async login(req: Request, res: Response, next: NextFunction) {
+		try {
+			const data = await validateBody(LoginDto, req.body)
+			const { email, password } = data;
+			const result = await this.authService.login(email, password)
+			return res.json(result)
+		} catch (err) {
+			next(err);
+		}
+	}
+}
 const authController = new AuthController(authService);
 
 export default authController

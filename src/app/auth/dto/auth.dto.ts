@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsString, IsStrongPassword, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsString, IsStrongPassword, MaxLength, MinLength } from "class-validator";
 import { SystemRole } from "../../user/enums";
 
 export class AuthDto {
@@ -26,5 +26,15 @@ export class AuthDto {
 	}, {
 		message: "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one symbol."
 	})
+	password!: string;
+}
+
+export class LoginDto {
+	@IsNotEmpty()
+	@IsEmail()
+	email!: string;
+
+	@IsNotEmpty()
+	@IsString()
 	password!: string;
 }
