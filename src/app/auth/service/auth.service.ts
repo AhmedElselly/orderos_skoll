@@ -1,8 +1,8 @@
 import id from "zod/v4/locales/id.js";
 import { SystemRole } from "../../user/enums";
-import { createUser, findUserExistsByEmailOrPhone } from "../../user/repository/users.repo";
+import { createUser, findByEmail, findUserExistsByEmailOrPhone } from "../../user/repository/users.repo";
 import { AuthDto } from "../dto/auth.dto";
-import { createAccessToken, createRefreshToken, hashPassword } from "../utils";
+import { comparePasswords, createAccessToken, createRefreshToken, hashPassword, JwtPayload } from "../utils";
 
 export class AuthService {
 	async register(data: AuthDto): Promise<any> {
@@ -39,6 +39,44 @@ export class AuthService {
 		const refreshToken = await createRefreshToken(payload);
 
 		return {
+			accessToken,
+			refreshToken,
+			user: {
+				id: user.id,
+				email: user.email,
+				phone: user.phone,
+				systemRole: user.systemRole,
+			}
+		}
+	}
+
+	async login(email: string, password: string): Promise<any> {
+		// find user by email
+		const user = await findByEmail(email);
+		console.log({ user })
+		// if user not found, throw error
+		if (!user) {
+			throw new Error("Incorrect credentials.");
+		}
+		// compare password with stored hash
+		const isMatch = await comparePasswords(password, user.passwordHash);
+		// if password does not match, throw error
+		if (!isMatch) {
+			throw new Error("Incorrect credentials.");
+		}
+		// create access token and refresh token
+		const payload = {
+			userId: user.id,
+			email: user.email,
+			role: user.systemRole,
+		}
+
+		const accessToken = await createAccessToken(payload as JwtPayload);
+		const refreshToken = await createRefreshToken(payload as JwtPayload);
+
+		// return tokens and user info
+		return {
+			message: 'Login successful.',
 			accessToken,
 			refreshToken,
 			user: {

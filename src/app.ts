@@ -10,9 +10,9 @@ export const startServer = () => {
 
 	app.use("/api", routes);
 
-	app.use((err: any, req: express.Request, res: express.Response) => {
-		console.error(err);
-		res.status(500).json({ error: 'Internal Server Error' });
+	app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+		console.log(err);
+		res.status(500).json({ error: err.message });
 	});
 
 	return app

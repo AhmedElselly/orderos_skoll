@@ -7,25 +7,26 @@ const mapRowToUser = (row: any): User => {
 		email: row.email,
 		phone: row.phone,
 		name: row.name,
-		passwordHash: row.passwordHash,
-		systemRole: row.systemRole,
-		deletedAt: row.deletedAt,
-		createdAt: row.createdAt,
-		updatedAt: row.updatedAt
+		passwordHash: row.password_hash,
+		systemRole: row.system_role,
+		deletedAt: row.deleted_at,
+		createdAt: row.created_at,
+		updatedAt: row.updated_at
 	})
 }
 
 export async function findByEmail(email: string): Promise<User | null> {
 	const row = await db('users')
 		.where('email', email)
-		.whereNull('deletedAt')
+		.whereNull('deleted_at')
 		.first();
 
 	if (!row) return null;
 
 	return mapRowToUser(row);
 }
-export async function findUserExistsByEmailOrPhone(email: string, phone: string): Promise<Boolean> {
+
+export async function findUserExistsByEmailOrPhone(email: string, phone: string | null): Promise<Boolean> {
 	const result = await db.raw(`select exists (select 1 from users where email = ? or phone = ? and deleted_at is null) as "exists"`, [email, phone]);
 	return result.rows[0].exists;
 }
